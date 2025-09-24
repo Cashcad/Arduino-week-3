@@ -1,0 +1,64 @@
+const int rLED=11;
+const int gLED=12;
+const int bLED=10; 
+ // the setup function runs once when you press reset or power the board
+void setup() {
+  // initialize digital pin LED_BUILTIN as an output.
+  pinMode(5, OUTPUT);
+  pinMode(1,OUTPUT);
+  pinMode(bLED,OUTPUT);
+  pinMode(rLED,OUTPUT);
+  pinMode(gLED,OUTPUT);
+}
+
+// the loop function runs over and over again forever
+void loop() {
+  digitalWrite(bLED,LOW);
+  digitalWrite(rLED,LOW);
+  digitalWrite(gLED,LOW);
+  delay(1000);
+  digitalWrite(bLED,HIGH);
+  digitalWrite(rLED,HIGH);
+  digitalWrite(gLED,HIGH);
+
+  delay(1000);
+  
+  digitalWrite(bLED,HIGH);
+  digitalWrite(rLED,LOW);
+  digitalWrite(gLED,LOW);
+  delay(1000);
+  digitalWrite(bLED,HIGH);
+  digitalWrite(rLED,HIGH);
+  digitalWrite(gLED,HIGH);
+  
+  delay(1000);
+
+  digitalWrite(bLED,LOW);
+  digitalWrite(rLED,HIGH);
+  digitalWrite(gLED,LOW);
+  delay(1000);
+  digitalWrite(bLED,HIGH);
+  digitalWrite(rLED,HIGH);
+  digitalWrite(gLED,HIGH);
+
+  delay(1000);
+
+  digitalWrite(bLED,LOW);
+  digitalWrite(rLED,LOW);
+  digitalWrite(gLED,HIGH);
+  delay(1000);
+  digitalWrite(bLED,HIGH);
+  digitalWrite(rLED,HIGH);
+  digitalWrite(gLED,HIGH);
+
+  delay(1000);
+
+  digitalWrite(5, HIGH);  // turn the LED on (HIGH is the voltage level)
+  delay(600);                      // wait for a second
+  digitalWrite(5, LOW);   // turn the LED off by making the voltage LOW
+  digitalWrite(1,HIGH);
+  delay(600);
+  digitalWrite(1,LOW);
+  delay(2000);
+                        // wait for a second
+}

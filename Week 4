@@ -1,0 +1,77 @@
+first program
+const int bupin = 8;
+const int r = 9;
+const int b = 10;
+const int g= 11;
+
+int bustate=0;
+int compteur=0;
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  pinMode(r,OUTPUT);
+  pinMode(b,OUTPUT);
+  pinMode(g,OUTPUT);
+  pinMode(bupin,INPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  bustate = digitalRead(bupin);
+  if (bustate == LOW){
+    compteur=compteur+1;
+    delay(500);
+  }
+  if (compteur == 0){
+    digitalWrite(r,HIGH);
+    digitalWrite(b,HIGH);
+    digitalWrite(g,HIGH);
+    Serial.println("nothing");
+  }
+  if (compteur == 1){
+    digitalWrite(r,LOW);
+    digitalWrite(b,HIGH);
+    digitalWrite(g,HIGH);
+    Serial.println("red");
+  }
+  if (compteur == 2){
+    digitalWrite(r,HIGH);
+    digitalWrite(b,LOW);
+    digitalWrite(g,HIGH);
+    Serial.println("Blue");
+  }
+  if (compteur == 3){
+    digitalWrite(r,HIGH);
+    digitalWrite(b,HIGH);
+    digitalWrite(g,LOW);
+    Serial.println("green");
+  }
+  if (compteur == 4){
+    digitalWrite(r,LOW);
+    digitalWrite(b,LOW);
+    digitalWrite(g,HIGH);
+    Serial.println("magenta");
+  }
+  if (compteur == 5){
+    digitalWrite(r,HIGH);
+    digitalWrite(b,LOW);
+    digitalWrite(g,LOW);
+    Serial.println("cyan");
+  }
+  if (compteur == 6){
+    digitalWrite(r,LOW);
+    digitalWrite(b,HIGH);
+    digitalWrite(g,LOW);
+    Serial.println("yellow");
+  }
+  if (compteur == 7){
+    digitalWrite(r,LOW);
+    digitalWrite(b,LOW);
+    digitalWrite(g,LOW);
+    Serial.println("White");
+  }
+  else if (compteur == 8){
+    compteur = 0;
+  }
+}

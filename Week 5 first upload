@@ -1,0 +1,77 @@
+const int bupin = 8;
+const int r = 9;
+const int b = 10;
+const int g= 11;
+bool bupress= false ;
+int ledstate = LOW;
+bool rise = true;
+int bustate=0;
+int compteur=1;
+unsigned long previousMillis = 0;
+const long interval = 1000; 
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  pinMode(r,OUTPUT);
+  pinMode(b,OUTPUT);
+  pinMode(g,OUTPUT);
+  pinMode(bupin,INPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  bustate = digitalRead(bupin);
+  
+  unsigned long currentMillis = millis();
+  if(currentMillis-previousMillis >=interval){
+    previousMillis = currentMillis;
+    if (rise == true){
+    compteur=compteur+1;
+    } else {
+      compteur=compteur-1;
+    }
+  }
+  if ((bustate == LOW )&& (!bupress )&& (!rise)){
+    rise=true;
+    bupress= true;
+
+  }
+  if ((bustate ==LOW )&& (!bupress )&& (rise)){
+    rise=false;
+    bupress = true;
+  }
+  if (bustate == HIGH && bupress){
+    bupress=false;
+  }
+  if (compteur == 1){
+    digitalWrite(r,LOW);
+    digitalWrite(b,HIGH);
+    digitalWrite(g,HIGH);
+    Serial.println("red");
+  }
+  if (compteur == 2){
+    digitalWrite(r,HIGH);
+    digitalWrite(b,HIGH);
+    digitalWrite(g,LOW);
+    Serial.println("green");
+  }
+  if (compteur == 3){
+    digitalWrite(r,HIGH);
+    digitalWrite(b,LOW);
+    digitalWrite(g,HIGH);
+    Serial.println("Blue");
+  }
+  if (compteur == 4){
+    digitalWrite(r,LOW);
+    digitalWrite(b,LOW);
+    digitalWrite(g,LOW);
+    Serial.println("White");
+  }
+  if (compteur == 5){
+    compteur = 1;
+  }
+  if (compteur == 0){
+    compteur = 4;
+  }
+}

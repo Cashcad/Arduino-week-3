@@ -1,0 +1,24 @@
+int rled = 9;         // the PWM pin the LED is attached to
+int bled= 11;
+int gled = 10;
+int valuepot=0;
+int outputval=0;
+const int analogpin = A0;
+
+// the setup routine runs once when you press reset:
+void setup() {
+  // declare pin 9 to be an output:
+  pinMode(rled, OUTPUT);
+  pinMode(bled,OUTPUT);
+  pinMode(gled,OUTPUT);
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+  valuepot=analogRead(analogpin);
+  outputval=map(valuepot,0,1023,0,255);
+  analogWrite(rled,outputval);
+  analogWrite(bled,outputval);
+  analogWrite(gled,outputval);
+  delay(1);
+}

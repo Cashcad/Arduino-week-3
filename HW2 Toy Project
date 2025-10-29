@@ -1,0 +1,71 @@
+const int rled = 9 ;
+const int bled = 10;
+const int gled =  11;
+const int bupin = 8 ;
+int gaylev = 10;
+int bustate = 0;
+unsigned long touchTimer=0;
+unsigned long secondTimer=0;
+const long inter1 = 1000;
+const long inter2 = 5000;
+int couleurblue=0;
+int couleurred = 0;
+int couleurgreen = 0;
+
+bool bupress=false;
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(bupin,INPUT);
+  pinMode(rled,OUTPUT);
+  pinMode(bled,OUTPUT);
+  pinMode(gled,OUTPUT);
+  Serial.begin(9600);
+}
+
+
+void loop() {
+  //Maj Color
+
+  
+  if (gaylev <= 10) {
+    couleurred = 255;
+    couleurgreen = map(gaylev, 0, 10, 255, 0);
+    couleurblue = map(gaylev, 0, 10, 0, 255);
+  } 
+  else {
+    couleurred = map(gaylev, 10, 20, 255, 0);
+    couleurgreen = map(gaylev, 10, 20, 0, 255);
+    couleurblue = 255;
+  }
+
+  analogWrite(rled,couleurred);
+  analogWrite(bled,couleurblue);
+  analogWrite(gled,couleurgreen);
+
+
+  
+  bustate=digitalRead(bupin);
+
+  if (bustate==HIGH && !bupress){
+    gaylev= gaylev+1;
+    if(gaylev>20){
+      gaylev=20;
+    }
+    touchTimer=millis();
+    bupress=true ;
+  }
+  if (bustate ==LOW && bupress){
+    bupress=false;
+  }
+
+  //Timer button
+  unsigned long currentMillis= millis();
+  if (currentMillis-touchTimer > inter2){  
+    if ( currentMillis - secondTimer > inter1) {
+      gaylev=gaylev-1;
+      if (gaylev<0) gaylev=0;
+      secondTimer=currentMillis;
+    }
+  }
+}

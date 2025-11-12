@@ -1,0 +1,230 @@
+const int bupin = 7;
+const int rled = 9;
+const int bled = 10;
+const int gled = 11;
+int bustate = 0;
+bool bupress=false;
+unsigned long inter=1000;
+int mod= 0;
+unsigned long blinktime=0 ;
+bool blinkon= true;
+int blinkinterfast = 100;
+int blinkinterslow = 1000;
+int blinkintermid = 500;
+int lightmod = 0;
+int r=0;
+int b=0;
+int g=0;
+unsigned long startpress=0;
+unsigned long endpress = 0;
+float brightness = 0.0;
+float fade = 0.005;
+int rfade=0;
+int bfade=0;
+int gfade=0;
+unsigned long fadetime=0;
+unsigned long fadeinter=100;
+
+
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(bupin,INPUT);
+  pinMode(rled,OUTPUT);
+  pinMode(bled,OUTPUT);
+  pinMode(gled,OUTPUT);
+  Serial.begin(9600);
+}
+
+
+
+void setcolor(int r, int b, int g){
+  analogWrite(rled,r);
+  analogWrite(bled,b);
+  analogWrite(gled,g);
+}
+
+void checkbutton(){
+  bustate = digitalRead(bupin);
+  
+  if(bustate==LOW && !bupress){
+    startpress=millis();
+    bupress=true;
+  }
+  if (bustate==HIGH && bupress){
+    endpress=millis();
+    if (endpress-startpress < inter){
+      //SHORT PRESS
+      colorset();
+    }
+    else{
+      //LONG PRESS
+      changeMode();
+    }
+    bupress=false;
+  }
+}
+
+
+
+void changeMode(){
+  mod+=1;
+
+  if (mod==5){      //max a 2
+    mod=0;
+  }
+  blinkon=true;
+  blinktime=millis();
+}
+
+
+
+
+
+
+
+void colorset(){
+  lightmod+=1;
+  if (lightmod==10){     //max a 5
+    lightmod=0;
+  }
+
+  if(lightmod==0){
+    //WHITE
+    r=0;
+    b=0;
+    g=0;
+    setcolor(r,b,g);
+  }
+  if(lightmod==1){
+    //red
+    r=0;
+    b=255;
+    g=255;
+    setcolor(r,b,g);
+  }
+  if (lightmod==2){
+    //orange
+    r=0;
+    b=255;
+    g=127;
+    setcolor(r,b,g);
+  }
+  if(lightmod==3){
+    //Yellow
+    r=0;
+    b=255;
+    g=0;
+    setcolor(r,b,g);
+  }
+  if(lightmod==4){
+    //jsp
+    r=127;
+    b=255;
+    g=0;
+    setcolor(r,b,g);
+  }
+  if(lightmod==5){
+    r=255;
+    b=255;
+    g=0;
+    setcolor(r,b,g);
+  }
+  if(lightmod==6){
+    r=255;
+    b=127;
+    g=0;
+    setcolor(r,b,g);
+  }
+  if(lightmod==7){
+    r=255;
+    b=0;
+    g=0;
+    setcolor(r,b,g);
+  }
+  if(lightmod==8){
+    r=255;
+    b=0;
+    g=127;
+    setcolor(r,b,g);
+  }
+  if(lightmod==9){
+    //Blue
+    r=255;
+    b=0;
+    g=255;
+    setcolor(r,b,g);
+  }
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  checkbutton();
+
+  if(mod==0){       //LUMIERE CONSTANTE
+    setcolor(r,b,g);
+  }
+
+
+  if(mod==1){       //Blink slow
+    unsigned long currentmillis=millis();
+    if (currentmillis-blinktime >blinkinterslow){
+      blinkon=!blinkon;
+      blinktime=currentmillis;
+    }
+    if(blinkon){
+      setcolor(r,b,g);
+    }
+    if(!blinkon){
+      setcolor(255,255,255);
+    }
+  }
+
+
+  if(mod==2){       //Blink Mid
+    unsigned long currentmillis=millis();
+    if (currentmillis-blinktime >blinkintermid){
+      blinkon=!blinkon;
+      blinktime=currentmillis;
+    }
+    if(blinkon){
+      setcolor(r,b,g);
+    }
+    if(!blinkon){
+      setcolor(255,255,255);
+    }
+  }
+  Serial.println(mod);
+
+
+  if(mod==3){       //Blink Fast
+    unsigned long currentmillis=millis();
+    if (currentmillis-blinktime >blinkinterfast){
+      blinkon=!blinkon;
+      blinktime=currentmillis;
+    }
+    if(blinkon){
+      setcolor(r,b,g);
+    }
+    if(!blinkon){
+      setcolor(255,255,255);
+    }
+  }
+
+
+  if (mod==4){      //BREATH
+    unsigned long currentmillis=millis();
+    if(currentmillis-fadetime > fadeinter){
+      fadetime=currentmillis;
+    }
+      brightness=brightness+fade;
+      if(brightness <=0.0 || brightness >= 1.0){
+        fade=-fade;
+      }
+      rfade=255-(r*brightness);
+      bfade=255-(b*brightness);
+      gfade=255-(g*brightness);
+      setcolor(rfade,bfade,gfade);
+  }
+}
